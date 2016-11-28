@@ -19,6 +19,7 @@ end
 
 		service apache do
 			action :start
+			supports :start => true, :restart => true
 		end
 
 
@@ -33,10 +34,13 @@ end
 
 		template "#{node['www']['ubuntuapacheloc']}/000-default.conf" do
 			source "000-default.conf.erb"
+			variables(
+				:dir => "#{node['www']['dir']}"
+				)
 			mode "0644"
 			owner "#{user}"
 			group "#{user}"
-			notifies :restat, "service[#{apache}]"
+			notifies :reload, "service[#{apache}]"
 
 		end
 

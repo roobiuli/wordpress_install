@@ -6,3 +6,6 @@
 include_recipe "wordpress_install::basics"
 include_recipe "wordpress_install::apache"
 include_recipe "wordpress_install::php"
+include_recipe "wordpress_install::wordpress"
+include_recipe "wordpress_install::mysql"
+

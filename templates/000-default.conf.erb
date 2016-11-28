@@ -9,7 +9,7 @@
 	#ServerName www.example.com
 
 	ServerAdmin robert@centuriondecisions.com
-	DocumentRoot <%"#{node['www']['dir']}" %>
+	DocumentRoot <%= @dir -%>
 
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
 	# error, crit, alert, emerg.
