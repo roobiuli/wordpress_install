@@ -23,7 +23,7 @@ if File.exists?("#{node['www']['dir']}/wordpress")
 
 	execute "set_wordpress" do
 		command "mv #{node['www']['dir']}/wordpress/* #{node['www']['dir']} ; mv #{node['www']['dir']}/wordpress/.* #{node['www']['dir']}"
-		creates "#{node['www']['dir']}/wp-login.php"
+		not_if { ::File.exists?("#{node['www']['dir']}/wp-login.php") }
 
 	end
 
