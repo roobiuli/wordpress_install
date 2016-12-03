@@ -4,22 +4,40 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+
+
 case node["platform"]
 when "ubuntu", "debian"
 	apache = "apache2"
 	user = "www-data"
-when "suse", "redhat"
+
+	httploc = node['www']['ubuntuapacheloc']
+
+when "suse", "rhel", "centos"
 	apache = "httpd"
-	user = "apache"
+	user = 'apache'
+
+	httploc = node['www']['fedoraapacheloc']
+
+
+	file "welcomehttp" do
+	path "/etc/httpd/conf.d/welcome.conf"
+	action :delete
+    end
+
 end
 
-		package apache do
+		package "#{apache}" do
 			action :install
+			if ::File.exists?("/etc/httpd/conf.d/welcome.conf")
+				notifies :delete, "file[welcomehttp]", :immediate 
+			end
 		end
 
-		service apache do
+		service "#{apache}" do
 			action :start
 			supports :start => true, :restart => true
+
 		end
 
 
@@ -32,8 +50,9 @@ end
 			mode 0644
 		end
 
-		template "#{node['www']['ubuntuapacheloc']}/000-default.conf" do
+		template "#{httploc}/000-default.conf" do
 			source "000-default.conf.erb"
+			action :create
 			variables(
 				:dir => "#{node['www']['dir']}"
 				)

@@ -8,19 +8,23 @@ when "debian", "ubuntu"
 
 	end
 
-	package ["php", "php-mysql"] do
-		action :install
-	end
 
 
-	service "php7.0-fpm" do
-		action :start
-	end	
 
+when "rhel", "centos"
 
-when "rhel"
-
-
-## Rhel code here
+# Rhel code goes here 
 
 end
+
+
+
+package ["php", "php-mysql"] do
+		action :install
+
+		if node['platform'] == "rhel"
+			service "php7.0-fpm" do
+			action :start
+			end	
+		end
+	end
